@@ -80,5 +80,9 @@ class CartBloc extends Bloc<CartEvent, CartState> {
               }
       );
     });
+
+    on<DeleteAllCartItemsEvent>((event,emit) async{
+      return emit(CartIsEmpty(message: 'Your Cart Is Empty'));
+    });
   }
 }

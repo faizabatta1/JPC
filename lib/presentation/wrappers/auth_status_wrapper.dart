@@ -23,66 +23,6 @@ class _AuthStatusWrapperState extends State<AuthStatusWrapper>{
           if(state is UserLoggedInState){
             return const HomeNavigatorScreen();
           }
-          //else if(state is VerificationLinkSentSuccessfully){
-          //   return Container(
-          //     padding: const EdgeInsets.all(8.0),
-          //     width: double.infinity,
-          //     child: Column(
-          //       mainAxisAlignment: MainAxisAlignment.center,
-          //       crossAxisAlignment: CrossAxisAlignment.center,
-          //       children: [
-          //         const Text('verification link was successfully sent'),
-          //         const AutoSizeText('go to your email and click on the link to activate your account',maxLines: 1,),
-          //         TextButton(
-          //           onPressed: (){
-          //             // BlocProvider.of<AuthStatusBloc>(context).add(
-          //             //   EmailVerifiedEvent()
-          //             // );
-          //           },
-          //           child: const Text('continue'),
-          //         )
-          //       ],
-          //     ),
-          //   );
-          // }
-          // else if(state is VerificationLinkFailedToSend){
-          //   return SizedBox(
-          //     width: double.infinity,
-          //     child: Column(
-          //       mainAxisAlignment: MainAxisAlignment.center,
-          //       children: [
-          //         const AutoSizeText('something went wrong'),
-          //         ElevatedButton(
-          //           onPressed: (){
-          //             // BlocProvider.of<AuthStatusBloc>(context).add(
-          //             //     SendVerificationCodeEvent()
-          //             // );
-          //           },
-          //           child: const AutoSizeText('try again'),
-          //         )
-          //       ],
-          //     ),
-          //   );
-          //
-          // }else if(state is UserEmailNotVerifiedState){
-          //   return SizedBox(
-          //     width: double.infinity,
-          //     child: Column(
-          //       mainAxisAlignment: MainAxisAlignment.center,
-          //       children: [
-          //         const AutoSizeText('email is not verified yet check your email'),
-          //         ElevatedButton(
-          //           onPressed: (){
-          //             // BlocProvider.of<AuthStatusBloc>(context).add(
-          //             //   SendVerificationCodeEvent()
-          //             // );
-          //           },
-          //           child: const AutoSizeText('send verification code'),
-          //         )
-          //       ],
-          //     ),
-          //   );
-          // }
           else if(state is UserNotLoggedInState){
             return const LoginScreenNavigator();
           }else if(state is AuthStatusInitial){

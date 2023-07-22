@@ -1,10 +1,11 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:material_dialogs/material_dialogs.dart';
 import '../../core/routing/home_router.dart';
 
-class HomeNavigatorScreen extends StatefulWidget{
+class HomeNavigatorScreen extends StatefulWidget {
   const HomeNavigatorScreen({super.key});
 
   @override
@@ -13,61 +14,47 @@ class HomeNavigatorScreen extends StatefulWidget{
 
 class _HomeNavigatorScreenState extends State<HomeNavigatorScreen> {
   final GlobalKey<NavigatorState> _nestedNavigatorKey = GlobalKey<NavigatorState>();
-
+  bool _showExitSnackbar = false;
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: WillPopScope(
-        onWillPop: () async{
-
-          if (_nestedNavigatorKey.currentState!.canPop()) {
-            _nestedNavigatorKey.currentState!.pop();
-            return false;
+    return WillPopScope(
+      onWillPop: () async {
+        if (_nestedNavigatorKey.currentState!.canPop()) {
+          _nestedNavigatorKey.currentState!.pop();
+          return false;
+        } else {
+          if (_showExitSnackbar) {
+            SystemNavigator.pop();
+            return true;
           } else {
-            bool willPopup = await showDialog(
-                context: context,
-                builder: (context){
-                  return AlertDialog(
-                      content: AutoSizeText("are you sure you want to exit the app ?"),
-                      actions: [
-                        OutlinedButton(
-                          onPressed: () {
-                            Navigator.pop(context,false);
-                          },
-                          child: Text('Cancel',style: TextStyle(color: Colors.grey),),
-                        ),
-                        ElevatedButton(
-                          style: ButtonStyle(
-                            backgroundColor: MaterialStatePropertyAll(Colors.red),
-                          ),
-                          onPressed: () {
-                            Navigator.pop(context,true);
-                          },
-                          child: Text('exit',style: TextStyle(color: Colors.white),),
-                        ),
-                      ]);
-                }
-            );
-
-            if(willPopup){
-              if(Navigator.canPop(context)){
-                return true;
-              }else{
-                SystemNavigator.pop();
-                return false;
-              }
-            }else{
-              return false;
-            }
+            _showExitSnackbar = true;
+            _showExitSnackbarSnackbar();
+            SchedulerBinding.instance!.addPostFrameCallback((timeStamp) {
+              Future.delayed(Duration(seconds: 5), () {
+                setState(() {
+                  _showExitSnackbar = false;
+                });
+              });
+            });
+            return false;
           }
-        },
-        child: Scaffold(
-          body: Navigator(
-            key: _nestedNavigatorKey,
-            onGenerateRoute: HomeRouter.generatedRoute,
-          ),
+        }
+      },
+      child: Scaffold(
+        body: Navigator(
+          key: _nestedNavigatorKey,
+          onGenerateRoute: HomeRouter.generatedRoute,
         ),
+      ),
+    );
+  }
+
+  void _showExitSnackbarSnackbar() {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: AutoSizeText("Are you sure you want to exit the app"),
+        duration: Duration(seconds: 5),
       ),
     );
   }

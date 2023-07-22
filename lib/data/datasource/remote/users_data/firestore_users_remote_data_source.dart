@@ -35,8 +35,7 @@ class FirestoreUsersRemoteDataSource implements UsersRemoteDataSource{
 
     if(users.isEmpty){
       return UserInformation(
-        firstName: 'john',
-        lastName: 'doe',
+        username: 'John Doe',
         phone: '+0123456789',
         address: 'Egypt',
         email: 'johndoe@example.com',

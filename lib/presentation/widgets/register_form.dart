@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:jpc/core/helpers/theme_helper.dart';
 import 'package:jpc/data/entities/user_auth_credentials.dart';
 import 'package:jpc/data/models/user_information.dart';
@@ -18,8 +19,7 @@ class RegisterForm extends StatefulWidget {
 }
 
 class _RegisterFormState extends State<RegisterForm> {
-  final TextEditingController firstNameController = TextEditingController();
-  final TextEditingController lastNameController = TextEditingController();
+  final TextEditingController usernameController = TextEditingController();
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
   final TextEditingController confirmPasswordController =
@@ -38,8 +38,7 @@ class _RegisterFormState extends State<RegisterForm> {
 
   @override
   void dispose() {
-    firstNameController.dispose();
-    lastNameController.dispose();
+    usernameController.dispose();
     emailController.dispose();
     passwordController.dispose();
     confirmPasswordController.dispose();
@@ -50,235 +49,192 @@ class _RegisterFormState extends State<RegisterForm> {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 12.0),
-      child: SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Image.asset(
-              "assets/jpc.png",
-              width: 100,
-              height: 100,
+    return SingleChildScrollView(
+      scrollDirection: Axis.vertical,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Container(
+            alignment: Alignment.center,
+            child: Text(
+              "Join JPC Shop",
+              style: GoogleFonts.akayaKanadaka(
+                fontSize: 30,
+                color: ThemeHelper.primaryColor,
+              ),
+              textAlign: TextAlign.center,
             ),
-            const AutoSizeText(
-              "انشاء حساب جديد",
-              style: TextStyle(fontSize: 30),
-              maxLines: 1,
+          ),
+          SizedBox(
+            height: 35,
+          ),
+          Padding(
+            padding: const EdgeInsets.only(left: 20),
+            child: Text(
+              "Create your Account",
+              style: TextStyle(
+                  color: Colors.grey[700],
+                  fontSize: 17,
+                  fontWeight: FontWeight.bold),
             ),
-            const SizedBox(
-              height: 30,
+          ),
+          Card(
+            margin: EdgeInsets.only(left: 30, top: 30),
+            elevation: 3,
+            child: Container(
+              margin: EdgeInsets.only(left: 10),
+              width: 320,
+              height: 50,
+              color: Colors.white,
+              child: TextFormField(
+                decoration: InputDecoration(
+                    hintText: ' Name',
+                    hintStyle: TextStyle(
+                      color: Colors.grey,
+                      fontWeight: FontWeight.bold,
+                    ),
+                    border: InputBorder.none),
+              ),
             ),
-            Form(
-              key: _formKey,
-              child: Column(
-                children: [
-                  Directionality(
-                    textDirection: TextDirection.rtl,
-                    child: TextFormField(
-                      keyboardType: TextInputType.name,
-                      controller: firstNameController,
-                      decoration: const InputDecoration(
-                        border: OutlineInputBorder(),
-                        label: Text('الاسم الاول'),
-                        hintText: 'الاسم الاول',
-                        prefixIcon: Icon(Icons.text_fields),
-                      ),
+          ),
+          Card(
+            margin: EdgeInsets.only(left: 30, top: 30),
+            elevation: 3,
+            child: Container(
+              margin: EdgeInsets.only(left: 10),
+              width: 320,
+              height: 50,
+              color: Colors.white,
+              child: TextFormField(
+                decoration: InputDecoration(
+                    hintText: 'Email',
+                    hintStyle: TextStyle(
+                      color: Colors.grey,
+                      fontWeight: FontWeight.bold,
                     ),
-                  ),
-                  const SizedBox(
-                    height: 20,
-                  ),
-                  Directionality(
-                    textDirection: TextDirection.rtl,
-                    child: TextFormField(
-                      keyboardType: TextInputType.name,
-                      controller: lastNameController,
-                      decoration: const InputDecoration(
-                        border: OutlineInputBorder(),
-                        label: Text('الاسم الاخير'),
-                        hintText: 'الاسم الاخير',
-                        prefixIcon: Icon(Icons.text_fields),
-                      ),
-                    ),
-                  ),
-                  const SizedBox(
-                    height: 20,
-                  ),
-                  TextFormField(
-                    keyboardType: TextInputType.emailAddress,
-                    controller: emailController,
-                    // validator: (value) {
-                    //   if (value == null || value.isEmpty) {
-                    //     return 'Please enter an email address';
-                    //   } else if (!gmailRegex.hasMatch(value)) {
-                    //     return 'Please enter a valid Gmail address';
-                    //   }
-                    //   return null;
-                    // },
-                    decoration: const InputDecoration(
-                      border: OutlineInputBorder(),
-                      label: Text('email'),
-                      hintText: 'email',
-                      prefixIcon: Icon(Icons.email),
-                    ),
-                  ),
-                  const SizedBox(
-                    height: 20,
-                  ),
-                  TextFormField(
-                    controller: passwordController,
-                    obscureText: !_isPasswordVisible,
-                    validator: (password) {
-                      if (password != null) {
-                        if (password.isEmpty) {
-                          return "please enter password";
-                        } else if (password.length < 8) {
-                          return "your password is very short";
-                        }
-                      } else {
-                        return "please enter something";
-                      }
-
-                      return null;
-                    },
-                    autovalidateMode: AutovalidateMode.onUserInteraction,
-                    decoration: InputDecoration(
-                        border: const OutlineInputBorder(),
-                        label: const Text('password'),
-                        hintText: 'password',
-                        prefixIcon: const Icon(Icons.password),
-                        suffix: InkWell(
-                            onTap: () {
-                              setState(() {
-                                _isPasswordVisible = !_isPasswordVisible;
-                              });
-                            },
-                            child: Icon(_isPasswordVisible
-                                ? Icons.visibility
-                                : Icons.visibility_off))),
-                  ),
-                  const SizedBox(
-                    height: 20,
-                  ),
-                  TextFormField(
-                    autovalidateMode: AutovalidateMode.onUserInteraction,
-                    validator: (confirm) {
-                      if (confirm != null) {
-                        if (confirm != passwordController.text) {
-                          return "passwords are not identical";
-                        } else if (confirm.isEmpty) {
-                          return "please enter password";
-                        } else if (confirm.length < 8) {
-                          return "your password is very short";
-                        }
-                      }
-                      return null;
-                    },
-                    controller: confirmPasswordController,
-                    obscureText: !_isPasswordVisible,
-                    decoration: InputDecoration(
-                        prefixIcon: const Icon(Icons.password),
-                        border: const OutlineInputBorder(),
-                        label: const Text('confirm password'),
-                        hintText: 'confirm password',
-                        suffix: InkWell(
-                            onTap: () {
-                              setState(() {
-                                _isPasswordVisible = !_isPasswordVisible;
-                              });
-                            },
-                            child: Icon(_isPasswordVisible
-                                ? Icons.visibility
-                                : Icons.visibility_off))),
-                  ),
-                  const SizedBox(height: 20),
-                  Directionality(
-                    textDirection: TextDirection.rtl,
-                    child: IntlPhoneField(
-                      initialCountryCode: 'PS',
-                      controller: phoneController,
-                      decoration: const InputDecoration(
-                          prefixIcon: Icon(Icons.phone),
-                          border: OutlineInputBorder(),
-                          label: Text('رقم الهاتف'),
-                          hintText: 'رقم الهاتف'),
-                    ),
-                  ),
-                  const SizedBox(
-                    height: 20,
-                  ),
-                  InputDecorator(
-                    decoration:
-                        const InputDecoration(border: OutlineInputBorder()),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        CountryCodePicker(
-                          initialSelection: 'PS',
-                          favorite: const ['+970', 'PS'],
-                          showOnlyCountryWhenClosed: true,
-                          showCountryOnly: true,
-                          onChanged: (countryCode) {
-                            addressController.text = countryCode.name!;
-                          },
+                    border: InputBorder.none),
+              ),
+            ),
+          ),
+          Card(
+            margin: EdgeInsets.only(left: 30, top: 30),
+            elevation: 3,
+            child: Container(
+              margin: EdgeInsets.only(left: 10),
+              width: 320,
+              // Adjust the height of the Card to accommodate the IntlPhoneField
+              height: 70,
+              color: Colors.white,
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                // Wrap the IntlPhoneField with an Expanded widget
+                child: Row(
+                  children: [
+                    Expanded(
+                      // Use Expanded to make the IntlPhoneField take available width
+                      child: IntlPhoneField(
+                        controller: phoneController,
+                        keyboardType: TextInputType.phone,
+                        decoration: InputDecoration(
+                          hintText: 'PhoneNumber',
+                          hintStyle: TextStyle(
+                            color: Colors.grey,
+                            fontWeight: FontWeight.bold,
+                          ),
+                          border: InputBorder.none,
                         ),
-                        const Text('اختر المدينة التابعة لك')
-                      ],
+                        initialCountryCode: 'PS', // Replace with your desired initial country code
+                        onChanged: (phone) {
+                          // Use the onChanged callback to get the formatted phone number
+                          print(phone.completeNumber);
+                        },
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+          Card(
+            margin: EdgeInsets.only(left: 30, top: 30),
+            elevation: 3,
+            child: Container(
+              width: 330,
+              height: 50,
+              color: Colors.white,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                    child: CountryCodePicker(
+                      onChanged: (country) {
+                        // Handle the country code selection
+                        print(country.name);
+                        print(country.code);
+                      },
+                      // Optional: Set the initial country code
+                      initialSelection: 'PS',
+                      favorite: ['PS', 'US'], // Optional: Add favorite country codes
+                      showFlagMain: true,
+                      showFlagDialog: true,
                     ),
                   ),
-                  const SizedBox(
-                    height: 30,
-                  ),
-                  ElevatedButton(
-                      onPressed: () async {
-                        if (_formKey.currentState!.validate()) {
-                          if (passwordController.text ==
-                              confirmPasswordController.text) {
-                            UserAuthCredentials userAuthCredentials =
-                                UserAuthCredentials(
-                                    email: emailController.text,
-                                    password: passwordController.text);
-
-                            String? deviceToken =
-                                await CloudMessaging.getToken();
-
-                            UserInformation userInformation =
-                                UserInformation(
-                                    firstName: firstNameController.text,
-                                    lastName: lastNameController.text,
-                                    phone: phoneController.text,
-                                    address: addressController.text,
-                                    email: emailController.text,
-                                    deviceToken: deviceToken!);
-
-                            BlocProvider.of<RegisterBloc>(context).add(
-                              RegisterButtonPressed(
-                                  userInformation: userInformation,
-                                  userAuthCredentials: userAuthCredentials
-                              )
-                            );
-                          }
-                        }
-                      },
-                      style: ThemeHelper.fullSizePrimaryButtonStyle(context),
-                      child: const Text(
-                        'انشاء',
-                        style: TextStyle(
-                            fontSize: 25,
-                            fontFamily: 'Staatliches-Regular',
-                            fontWeight: FontWeight.w500,
-                            color: Colors.white),
-                      )),
-                  const SizedBox(
-                    height: 30,
+                  Expanded(
+                    // Add an empty container to fill the remaining space
+                    child: Container(),
                   ),
                 ],
               ),
-            )
-          ],
-        ),
+            ),
+          ),
+          SizedBox(
+            height: 10,
+          ),
+          Card(
+            margin: EdgeInsets.only(left: 30, top: 30),
+            elevation: 3,
+            child: Container(
+              margin: EdgeInsets.only(left: 10),
+              width: 320,
+              height: 50,
+              color: Colors.white,
+              child: TextFormField(
+                decoration: InputDecoration(
+                    hintText: 'Password',
+                    hintStyle: TextStyle(
+                      color: Colors.grey,
+                      fontWeight: FontWeight.bold,
+                    ),
+                    border: InputBorder.none),
+              ),
+            ),
+          ),
+          SizedBox(
+            height: 10,
+          ),
+          SizedBox(
+            height: 10,
+          ),
+          Center(
+            child: Container(
+              width: 180,
+              height: 40,
+              child: MaterialButton(
+                elevation: 5,
+                // minWidth: 320,
+                color: ThemeHelper.primaryColor,
+                shape: ContinuousRectangleBorder(
+                    borderRadius: BorderRadius.circular(20)),
+                onPressed: () {},
+                child: Text(
+                  "sign up ",
+                  style: TextStyle(color: Colors.white,fontSize: 20),
+                ),
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }

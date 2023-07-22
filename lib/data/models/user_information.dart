@@ -1,8 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class UserInformation{
-  final String firstName;
-  final String lastName;
+  final String username;
   final String phone;
   final String address;
   final String email;
@@ -10,8 +9,7 @@ class UserInformation{
   String? uid = '';
 
   UserInformation({
-    required this.firstName,
-    required this.lastName,
+    required this.username,
     required this.phone,
     required this.address,
     required this.email,
@@ -23,8 +21,7 @@ class UserInformation{
     Map data = document.data() as Map;
 
     return UserInformation(
-      firstName: data['firstName'],
-      lastName: data['lastName'],
+      username: data['username'],
       phone: data['phone'],
       address: data['address'],
       uid: data['uid'],
@@ -35,8 +32,7 @@ class UserInformation{
 
   Map<String,dynamic> toFirestore(){
     return {
-      'firstName': firstName,
-      'lastName': lastName,
+      'username': username,
       'phone': phone,
       'address': address,
       'uid': uid,

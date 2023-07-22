@@ -1,8 +1,13 @@
+import 'package:animated_bottom_navigation_bar/animated_bottom_navigation_bar.dart';
 import 'package:flutter/material.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:jpc/core/helpers/theme_helper.dart';
 import 'package:jpc/presentation/screens/favorite_products_screen.dart';
+import 'package:jpc/presentation/screens/main_screen.dart';
+import 'package:jpc/presentation/screens/more_screen.dart';
 import 'package:jpc/presentation/screens/orders_list_screen.dart';
 import 'package:jpc/presentation/screens/products_screen.dart';
+import 'package:jpc/presentation/screens/profile_screen.dart';
 import 'package:jpc/presentation/screens/rewards_screen.dart';
 import 'package:jpc/presentation/screens/whishlist.dart';
 import 'cart_screen.dart';
@@ -12,162 +17,68 @@ import '../widgets/drawer_screen.dart';
 
 
 
-class HomeScreen extends StatelessWidget {
-  const HomeScreen({super.key});
+class HomeScreen extends StatefulWidget {
+  HomeScreen({super.key});
+
+  @override
+  State<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
+  List<Map<String,dynamic>> items = [
+    { 'name': 'More', 'icon-outlined': Icons.article_outlined,'icon': Icons.article },
+    { 'name': 'Favorites', 'icon-outlined': Icons.favorite_outline, 'icon': Icons.favorite },
+    { 'name': 'Products', 'icon-outlined': Icons.shopping_bag_outlined, 'icon': Icons.shopping_bag },
+    { 'name': 'Profile', 'icon-outlined': Icons.account_circle_outlined, 'icon': Icons.account_circle },
+  ];
+
+  List<Widget> screens = [
+    MoreScreen(),
+    FavoriteProductsScreen(),
+    ProductsScreen(),
+    ProfileScreen(),
+    MainScreen()
+  ];
+
+  int _activeIndex = 4;
+
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       endDrawer: DrawerScreen(),
-      appBar: AppBar(
-        title: const Align(
-          alignment: Alignment.centerRight,
-          child: Text(
-            'الصفحة الرئيسية',
-            textDirection: TextDirection.rtl,
-          ),
-        ),
+      bottomNavigationBar: AnimatedBottomNavigationBar.builder(
+        itemCount: 4,
+        tabBuilder: (int index, bool isActive) {
+          return Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Icon(_activeIndex == index ? items[index]['icon'] : items[index]['icon-outlined'],color: _activeIndex == index ? ThemeHelper.secondaryColor : null,),
+              Text(items[index]['name'])
+            ],
+          );
+        },
+        notchSmoothness: NotchSmoothness.smoothEdge,
+        gapLocation: GapLocation.center,
+        activeIndex: _activeIndex,
+        onTap: (int index ) {
+          setState(() {
+            _activeIndex = index;
+          });
+        },
+
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+      floatingActionButton: FloatingActionButton(
+        onPressed: (){
+          setState(() {
+            _activeIndex = 4;
+          });
+        },
+        child: Icon(Icons.home_outlined,size: 40,color: Colors.white,),
       ),
 
-      body: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Column(
-          children: [
-            const SizedBox(height: 15,),
-            // Image at the top
-            SizedBox(
-              height: 150,
-              child: Image.asset("assets/jpc.png", width: 150, height: 150,),
-            ),
-
-            // List of rectangles
-            GridView(
-              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 2,
-                  crossAxisSpacing: 8.0,
-                  mainAxisSpacing: 8.0,
-                  childAspectRatio: 5 / 3
-              ),
-              shrinkWrap: true,
-              physics: NeverScrollableScrollPhysics(),
-              children: [
-                GestureDetector(
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => ProductsScreen()),
-                    );
-                  },
-                  child: Container(
-                    alignment: Alignment.center,
-                    decoration: BoxDecoration(
-                        color: ThemeHelper.secondaryColor,
-                        borderRadius: BorderRadius.circular(8.0)
-                    ),
-                    child: Text('المنتجات',style: TextStyle(fontSize: 30,color: Colors.white),),
-                  ),
-                ),
-                GestureDetector(
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => PointsScreen()),
-                    );
-                  },
-                  child: Container(
-                    alignment: Alignment.center,
-                    decoration: BoxDecoration(
-                        color: ThemeHelper.secondaryColor,
-                        borderRadius: BorderRadius.circular(8.0)
-                    ),
-                    child: Text('الرصيد',style: TextStyle(fontSize: 30,color: Colors.white),),
-                  ),
-                ),
-                GestureDetector(
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => OrdersListScreen()),
-                    );
-                  },
-                  child: Container(
-                    alignment: Alignment.center,
-                    decoration: BoxDecoration(
-                        color: ThemeHelper.secondaryColor,
-                        borderRadius: BorderRadius.circular(8.0)
-                    ),
-                    child: Text('الطلبات',style: TextStyle(fontSize: 30,color: Colors.white),),
-                  ),
-                ),
-                GestureDetector(
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => RewardsScreen()),
-                    );
-                  },
-                  child: Container(
-                    alignment: Alignment.center,
-                    decoration: BoxDecoration(
-                        color: ThemeHelper.secondaryColor,
-                        borderRadius: BorderRadius.circular(8.0)
-                    ),
-                    child: Text('مكافئات',style: TextStyle(fontSize: 30,color: Colors.white),),
-                  ),
-                ),
-                GestureDetector(
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => WishlistScreen()),
-                    );
-                  },
-                  child: Container(
-                    alignment: Alignment.center,
-                    decoration: BoxDecoration(
-                        color: ThemeHelper.secondaryColor,
-                        borderRadius: BorderRadius.circular(8.0)
-                    ),
-                    child: Text('wish list',style: TextStyle(fontSize: 30,color: Colors.white),),
-                  ),
-                ),
-                GestureDetector(
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => CartScreen()),
-                    );
-                  },
-                  child: Container(
-                    alignment: Alignment.center,
-                    decoration: BoxDecoration(
-                      color: ThemeHelper.secondaryColor,
-                      borderRadius: BorderRadius.circular(8.0)
-                    ),
-                    child: Text('عربة التسوق',style: TextStyle(fontSize: 30,color: Colors.white),),
-                  ),
-                ),
-                GestureDetector(
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => FavoriteProductsScreen()),
-                    );
-                  },
-                  child: Container(
-                    alignment: Alignment.center,
-                    decoration: BoxDecoration(
-                        color: ThemeHelper.secondaryColor,
-                        borderRadius: BorderRadius.circular(8.0)
-                    ),
-                    child: Text('المفضلة',style: TextStyle(fontSize: 30,color: Colors.white),),
-                  ),
-                ),
-              ],
-            ),
-          ],
-        ),
-      ),
+      body: screens[_activeIndex],
     );
   }
 }

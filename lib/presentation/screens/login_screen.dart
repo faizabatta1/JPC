@@ -1,5 +1,10 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
-import 'package:flutter_stripe/flutter_stripe.dart';
+import 'package:flutter_social_button/flutter_social_button.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:jpc/core/helpers/theme_helper.dart';
 import 'package:jpc/presentation/screens/register_screen.dart';
 import 'package:jpc/presentation/screens/reset_password.dart';
@@ -7,6 +12,7 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:jpc/data/entities/user_auth_credentials.dart';
 import 'package:jpc/presentation/blocs/login_bloc/login_bloc.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:http/http.dart' as http;
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);
@@ -21,181 +27,165 @@ class _LoginScreenState extends State<LoginScreen> {
   final TextEditingController _passwordController = TextEditingController();
 
 
-
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   bool _isPasswordVisible = false;
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(12.0),
-      child: SingleChildScrollView(
+    return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+      ),
+      body: SingleChildScrollView(
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
+            Container(
+              alignment: Alignment.center,
+              child: Text(
+                "JPC Shop",
+                style: GoogleFonts.akayaKanadaka(
+                  fontSize: 30,
+                  color: ThemeHelper.accentColor,
+                ),
+                textAlign: TextAlign.center,
+              ),
+            ),
+            SizedBox(
+              height: 50,
+            ),
+            Padding(
+              padding: const EdgeInsets.only(left: 20),
+              child: Text(
+                "Login to your Account",
+                style: TextStyle(
+                    color: Colors.grey[700],
+                    fontSize: 17,
+                    fontWeight: FontWeight.bold),
+              ),
+            ),
+            Card(
+              margin: EdgeInsets.only(left: 30, top: 30),
+              elevation: 3,
+              child: Container(
+                margin: EdgeInsets.only(left: 10),
+                width: 320,
+                height: 50,
+                color: Colors.white,
+                child: TextFormField(
+                  controller: _emailController,
+                  decoration: InputDecoration(
+                      hintText: 'Email',
+                      hintStyle: TextStyle(
+                        color: Colors.grey,
+                        fontWeight: FontWeight.bold,
+                      ),
+                      border: InputBorder.none),
+                ),
+              ),
+            ),
+            SizedBox(
+              height: 10,
+            ),
+            Card(
+              margin: EdgeInsets.only(left: 30, top: 30),
+              elevation: 3,
+              child: Container(
+                margin: EdgeInsets.only(left: 10),
+                width: 320,
+                height: 50,
+                color: Colors.white,
+                child: TextFormField(
+                  controller: _passwordController,
+                  decoration: InputDecoration(
+                      hintText: 'Password',
+                      hintStyle: TextStyle(
+                        color: Colors.grey,
+                        fontWeight: FontWeight.bold,
+                      ),
+                      border: InputBorder.none),
+                ),
+              ),
+            ),
+            SizedBox(height: 24.0,),
+            Center(
+              child: Container(
+                width: 180,
+                height: 40,
+                child: MaterialButton(
+                  elevation: 5,
+                  // minWidth: 300,
+                  color: ThemeHelper.accentColor,
+                  shape: ContinuousRectangleBorder(
+                      borderRadius: BorderRadius.circular(20)),
+                  onPressed: () {
+                    final UserAuthCredentials userAuthCredentials = UserAuthCredentials(
+                        email: _emailController.text,
+                        password: _passwordController.text
+                    );
+
+                    context.read<LoginBloc>().add(
+                      LoginButtonPressed(userAuthCredentials: userAuthCredentials)
+                    );
+                  },
+                  child: Text(
+                    "sign in",
+                    style: TextStyle(color: Colors.white, fontSize: 18),
+                  ),
+                ),
+              ),
+            ),
+            SizedBox(
+              height: 100,
+            ),
+            Container(
+              alignment: Alignment.center,
+              child: Text(
+                "- Or Sign in with -",
+                style:
+                TextStyle(color: Colors.grey, fontWeight: FontWeight.bold, fontSize: 20),
+              ),
+            ),
+            SizedBox(
+              height: 20,
+            ),
+            Container(
+              padding: EdgeInsets.symmetric(horizontal: 20.0),
+              child: ElevatedButton.icon(
+                onPressed: (){},
+                icon: Icon(FontAwesomeIcons.google),
+                label: Text("Google",
+                  style: TextStyle(fontSize: 20),),
+                style: ElevatedButton.styleFrom(
+                  minimumSize: Size(double.infinity, 50)
+                ),
+              ),
+            ),
+            SizedBox(
+              height: 40,
+            ),
+            Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Image.asset("assets/jpc.png",width: 170,height: 170,),
-                const Text('تسجيل الدخول',style: TextStyle(
-                    fontSize: 30
-                )),
-                const SizedBox(height: 30,),
-                Form(
-                  key: _formKey,
-                  child: Column(
-                    children: [
-                      TextButton(
-                        onPressed: ()async{
-
-                          // var intent = PaymentIntent(id: '',status: '', amount: null, created: '', currency: '', clientSecret: '', livemode: true, captureMethod: CaptureMethod.Manual, confirmationMethod: null,);
-                          // intent.amount = widget.order.cart.total;
-                          // intent.isManual = true;
-                          // intent.isConfirmed = false;
-                          // intent.paymentMethodId = paymentResponse.paymentMethodId;
-                          // intent.currency = "usd";
-                          // intent.isOnSession = true;
-                          // intent.isSuccessful = false;
-                          // intent.statementDescriptor = "Dorm Mom, Inc";
-                          // var response = await widget.clientDataStore.createPaymentIntent(intent);
-                          //
-                          //
-                          // var intentResponse = await _stripePayment!.confirmPaymentIntent(
-                          //     response.clientSecret, paymentResponse.paymentMethodId, widget.order.cart.total);
-                          //
-                          // if (intentResponse.status == PaymentResponseStatus.succeeded) {
-                          //   widget.order.paymentIntentId = intentResponse.paymentIntentId;
-                          //   widget.order.paymentMethodId = paymentResponse.paymentMethodId;
-                          //   _submitOrder();
-                          // } else if (intentResponse.status == PaymentResponseStatus.failed) {
-                          //   setState(() {
-                          //     hideBusy();
-                          //   });
-                          //   globals.Utility.showAlertPopup(
-                          //       context, "Error Occurred", intentResponse.errorMessage);
-                          // } else {
-                          //   setState(() {
-                          //     hideBusy();
-                          //   });
-                          // }
-                        },
-                        child: Text('test payment'),
-                      ),
-                      TextFormField(
-
-                        controller: _emailController,
-                        autovalidateMode: AutovalidateMode.onUserInteraction,
-                        validator: (value){
-                          if(value!.isEmpty){
-                            return "please enter username";
-                          }else if(value.length < 8){
-                            return "username is too short";
-                          }
-
-                          return null;
-                        },
-
-                        decoration: const InputDecoration(
-                            prefixIcon: Icon(Icons.person,color: Colors.black,),
-                            border: OutlineInputBorder(
-
-                            ),
-                            label: Text('email'),
-                            hintText: 'email',
-                            suffixText: '@gmail.com'
-                        ),
-                      ),
-                      const SizedBox(height: 20,),
-                      TextFormField(
-                        autovalidateMode: AutovalidateMode.onUserInteraction,
-                        validator: (value){
-                          if(value!.isEmpty){
-                            return "please enter a password";
-                          }else if(value.length < 8){
-                            return "your password is too short";
-                          }
-
-                          return null;
-                        },
-                        controller: _passwordController,
-                        decoration: InputDecoration(
-                            prefixIcon: const Icon(Icons.password,color: Colors.black,),
-                            border: const OutlineInputBorder(),
-                            label: const Text('password'),
-                            hintText: 'password',
-                            suffix: InkWell(
-                              onTap: (){
-                                setState(() {
-                                  _isPasswordVisible = !_isPasswordVisible;
-                                });
-                              },
-                              child: _isPasswordVisible ? const Icon(Icons.visibility) : const Icon(Icons.visibility_off),
-                            )
-                        ),
-                        obscureText: !_isPasswordVisible,
-                      ),
-                      SizedBox(
-                        width: double.infinity,
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                TextButton(
-                                  child: const AutoSizeText('اعادة التعيين'),
-                                  onPressed: (){
-                                    Navigator.pushNamed(context, ResetPasswordScreen.reset);
-                                  },
-                                ),
-                                const Text('هل نسيت الرقم السري ؟'),
-                              ],
-                            ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                TextButton(
-                                  child: const AutoSizeText('انشاء حساب'),
-                                  onPressed: (){
-                                    Navigator.pushNamed(context, RegisterScreen.register);
-                                  },
-                                ),
-                                const Text('ليس لديك حساب ؟'),
-                              ],
-                            ),
-                          ],
-                        ),
-                      ),
-                      ElevatedButton(
-                          style: ThemeHelper.fullSizePrimaryButtonStyle(context),
-                          onPressed: (){
-                            if(_formKey.currentState!.validate()){
-                              UserAuthCredentials userAuthCredentials = UserAuthCredentials(
-                                  email: _emailController.text,
-                                  password: _passwordController.text
-                              );
-
-                              context.read<LoginBloc>().add(
-                                  LoginButtonPressed(
-                                      userAuthCredentials: userAuthCredentials
-                                  )
-                              );
-                            }
-                          },
-                          child: const AutoSizeText('تسجيل الدخول', style: TextStyle(
-                              fontSize: 25,
-                              fontFamily: 'Staatliches-Regular',
-                              fontWeight: FontWeight.w500,
-                              color: Colors.white),
-                          )
-                      ),
-
-                    ],
-
+                Text(
+                  "Don’t have an Account ? ",
+                  style: TextStyle(
+                      color: Colors.grey, fontWeight: FontWeight.bold),
+                ),
+                GestureDetector(
+                  onTap: () {
+                    Navigator.pushNamed(context, RegisterScreen.register);
+                  },
+                  child: Text(
+                    "SignUp ",
+                    style: TextStyle(
+                        color: ThemeHelper.accentColor,
+                        fontWeight: FontWeight.bold),
                   ),
-                )
+                ),
               ],
-            ),
+            )
           ],
         ),
       ),

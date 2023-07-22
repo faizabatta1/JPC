@@ -1,7 +1,9 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_stripe/flutter_stripe.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:jpc/presentation/blocs/auth_status/auth_status_bloc.dart';
 import 'package:jpc/presentation/blocs/cart_bloc/cart_bloc.dart';
 import 'package:jpc/presentation/blocs/notifications_bloc/notifications_bloc.dart';
@@ -17,6 +19,12 @@ import 'core/helpers/SQFLiteHelper.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  SystemChrome.setSystemUIOverlayStyle(
+    SystemUiOverlayStyle(
+      statusBarColor: Colors.transparent
+    )
+  );
+  MobileAds.instance.initialize();
   await Firebase.initializeApp();
   Stripe.publishableKey = 'pk_test_51N3EcJHHXVdH5ff2jGAGw29e2WcAlleHgFOwEQPm2jQARp6qIUiLBcspeDK4uUzYe2OYmq1tGXFipk630A8nVGgK00pLHqNjp3';
   Stripe.merchantIdentifier = 'any string works';

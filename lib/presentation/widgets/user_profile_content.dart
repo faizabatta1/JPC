@@ -28,7 +28,7 @@ class _UserProfileContentState extends State<UserProfileContent> {
                 ),
                 SizedBox(height: 16),
                 Text(
-                  '${widget.userInformation.firstName} ${widget.userInformation.lastName}',
+                  '${widget.userInformation.username}',
                   style: TextStyle(
                     fontSize: 24,
                     fontWeight: FontWeight.bold,

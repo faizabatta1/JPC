@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:jpc/presentation/screens/edit_profile_screen.dart';
+import 'package:jpc/presentation/screens/update_profile_screen.dart';
 import '../../core/helpers/theme_helper.dart';
 
 class ProfileScreen extends StatelessWidget {
@@ -9,30 +10,6 @@ class ProfileScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: AppBar(
-        backgroundColor: ThemeHelper.primaryColor,
-        actions: [
-          Padding(
-            padding: EdgeInsets.all(8.0),
-            child: GestureDetector(
-              onTap: (){
-                Navigator.of(context).push(
-                  MaterialPageRoute(builder: (context) => EditProfileScreen())
-                );
-              },
-              child: Icon(Icons.edit),
-            ),
-          )
-        ],
-        elevation: 0,
-        title: Text(
-          'Profile',
-          style: TextStyle(
-            fontSize: 20,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-      ),
       body: SingleChildScrollView(
         child: Column(
           children: [
@@ -94,12 +71,27 @@ class PersonalInfoWidget extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text(
-              'Personal Information',
-              style: TextStyle(
-                fontSize: 20,
-                fontWeight: FontWeight.bold,
-              ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Text(
+                  'Personal Information',
+                  style: TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+
+                IconButton(
+                  onPressed: (){
+                    Navigator.of(context).push(
+                      MaterialPageRoute(builder: (context) => UpdateProfileScreen())
+                    );
+                  },
+                  icon: Icon(Icons.edit,size: 30,color: ThemeHelper.accentColor,),
+                )
+              ],
             ),
             SizedBox(height: 10),
             Row(

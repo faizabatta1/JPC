@@ -5,11 +5,10 @@ abstract class AuthStatusEvent extends Equatable {
 }
 
 class AuthUserActiveEvent extends AuthStatusEvent{
-  final String uid;
-  const AuthUserActiveEvent({required this.uid});
+  const AuthUserActiveEvent();
 
   @override
-  List<Object?> get props => [uid];
+  List<Object?> get props => [];
 }
 
 class AuthUserNotActiveEvent extends AuthStatusEvent{

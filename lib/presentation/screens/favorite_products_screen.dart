@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
 class FavoriteProductsScreen extends StatefulWidget {
@@ -34,74 +35,107 @@ class _FavoriteProductsScreenState extends State<FavoriteProductsScreen> {
         title: Text('Favorite Products'),
         elevation: 0,
       ),
-      backgroundColor: Colors.black12,
-      body: GridView.builder(
+      body: ListView.builder(
         padding: EdgeInsets.all(10),
-        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 2,
-          crossAxisSpacing: 10,
-          mainAxisSpacing: 10,
-          childAspectRatio: 2 / 3,
-        ),
         itemCount: _products.length,
         itemBuilder: (BuildContext context, int index) {
           return GestureDetector(
             onTap: () {
               // Navigate to product detail screen
             },
-            child: Card(
-              elevation: 5,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  Expanded(
-                    child: Container(
-                      decoration: BoxDecoration(
-                        image: DecorationImage(
-                          image: AssetImage(_products[index]['image']),
-                          fit: BoxFit.cover,
+            child: Padding(
+              padding:
+              const EdgeInsets.only(bottom: 20),
+              child: Container(
+                decoration: BoxDecoration(
+                  borderRadius:
+                  BorderRadius.circular(10),
+                  color: Colors.white,
+                  boxShadow: [
+                    BoxShadow(
+                      color:
+                      Colors.black.withOpacity(0.1),
+                      blurRadius: 6,
+                      offset: Offset(0, 3),
+                    ),
+                  ],
+                ),
+                child: Row(
+                  children: [
+                    ClipRRect(
+                      borderRadius:
+                      BorderRadius.circular(10),
+                      child: CachedNetworkImage(
+                        imageUrl: 'https://images.pexels.com/photos/415829/pexels-photo-415829.jpeg?auto=compress&cs=tinysrgb&dpr=2&w=500',
+                        placeholder: (context, url) =>
+                            CircularProgressIndicator(),
+                        errorWidget:
+                            (context, url, error) =>
+                            Icon(Icons.error),
+                        width: 100,
+                        height: 100,
+                        fit: BoxFit.cover,
+                      ),
+                    ),
+                    SizedBox(width: 10),
+                    Expanded(
+                      child: Padding(
+                        padding:
+                        const EdgeInsets.symmetric(
+                            vertical: 10),
+                        child: Column(
+                          crossAxisAlignment:
+                          CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              "${'name'}",
+                              style: TextStyle(
+                                fontSize: 22,
+                                fontWeight:
+                                FontWeight.bold,
+                              ),
+                            ),
+                            SizedBox(height: 4),
+                            Text(
+                              "${'price'}",
+                              style: TextStyle(
+                                fontSize: 18,
+                                color: Colors.grey,
+                              ),
+                            ),
+                            SizedBox(height: 8),
+                            Row(
+                              children: [
+                                Icon(
+                                  Icons.star,
+                                  color: Colors.orange,
+                                  size: 20,
+                                ),
+                                SizedBox(width: 4),
+                                Text(
+                                  "4.5",
+                                  style: TextStyle(
+                                    fontSize: 16,
+                                    fontWeight:
+                                    FontWeight.bold,
+                                  ),
+                                ),
+                                SizedBox(width: 4),
+                                Text(
+                                  "(50 Reviews)",
+                                  style: TextStyle(
+                                    fontSize: 14,
+                                    color: Colors.grey,
+                                  ),
+                                )
+                              ],
+                            ),
+                          ],
                         ),
                       ),
                     ),
-                  ),
-                  Padding(
-                    padding: EdgeInsets.all(10),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          _products[index]['name'],
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 16,
-                          ),
-                        ),
-                        SizedBox(height: 5),
-                        Text(
-                          '\$${_products[index]['price'].toStringAsFixed(2)}',
-                          style: TextStyle(
-                            color: Colors.grey[700],
-                            fontSize: 14,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  IconButton(
-                    icon: Icon(
-                      _products[index]['isFavorite']
-                          ? Icons.favorite
-                          : Icons.favorite_border,
-                      color: Colors.red,
-                    ),
-                    onPressed: () {
-                      setState(() {
-                        _products[index]['isFavorite'] =
-                        !_products[index]['isFavorite'];
-                      });
-                    },
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
           );

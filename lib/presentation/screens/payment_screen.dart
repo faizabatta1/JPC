@@ -1,9 +1,13 @@
+import 'dart:convert';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_credit_card/flutter_credit_card.dart';
+import 'package:flutter_stripe/flutter_stripe.dart';
 import 'package:intl/intl.dart';
 import 'package:jpc/core/helpers/theme_helper.dart';
 import 'package:jpc/data/models/cart_item.dart';
+import 'package:http/http.dart' as http;
 
 class PaymentScreen extends StatefulWidget {
   final double paymentAmount;
@@ -205,12 +209,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
                       onPressed: () {
                         if (_formKey.currentState!.validate()) {
                           _formKey.currentState!.save();
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(
-                              content: Text('Payment Successful'),
-                              duration: Duration(seconds: 3),
-                            ),
-                          );
+
                         }
                       },
                       style: ThemeHelper.fullSizePrimaryButtonStyle(context),
@@ -231,4 +230,6 @@ class _PaymentScreenState extends State<PaymentScreen> {
       ),
     );
   }
+
+
 }

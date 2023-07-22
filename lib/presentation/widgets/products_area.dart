@@ -1,72 +1,17 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:jpc/core/helpers/theme_helper.dart';
-import 'package:jpc/presentation/blocs/products_bloc/products_bloc.dart';
+import 'package:jpc/data/models/product.dart';
 import 'package:jpc/presentation/screens/product_details_screen.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 
-import '../../data/models/product.dart';
+import '../blocs/products_bloc/products_bloc.dart';
 
 class ProductsArea extends StatelessWidget {
   final ProductState state;
-  const ProductsArea({Key? key,required this.state}) : super(key: key);
+  const ProductsArea({Key? key, required this.state}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-      // return GridView.builder(
-      //   physics: NeverScrollableScrollPhysics(),
-      //   shrinkWrap: true,
-      //   gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-      //       crossAxisCount: 2,
-      //       crossAxisSpacing: 8,
-      //       mainAxisSpacing: 8
-      //   ),
-      //   itemCount: state.products.length,
-      //
-      //   itemBuilder: (context,index){
-      //     Product product = state.products[index];
-      //     return GestureDetector(
-      //       onTap: (){
-      //         Navigator.of(context).push(
-      //           MaterialPageRoute(builder: (context) => ProductDetailsScreen(product: product,))
-      //         );
-      //       },
-      //       child: Container(
-      //         decoration: BoxDecoration(
-      //           borderRadius: BorderRadius.circular(12.0),
-      //           color: ThemeHelper.secondaryColor,
-      //           boxShadow: [
-      //             BoxShadow(
-      //               offset: Offset(-3,3),
-      //               color: Colors.grey
-      //             )
-      //           ]
-      //         ),
-      //         child: Padding(
-      //           padding: const EdgeInsets.all(8.0),
-      //           child: Column(
-      //             children: [
-      //               Expanded(
-      //                 flex: 1,
-      //                 child: Image.network(product.imageUrl),
-      //               ),
-      //               SizedBox(height: 8),
-      //               Text(
-      //                 product.name,
-      //                 style: TextStyle(fontSize: 16,color: Colors.white, fontWeight: FontWeight.bold),
-      //               ),
-      //               SizedBox(height: 8),
-      //               Text(
-      //                 '\$${product.price.toStringAsFixed(2)}',
-      //                 style: TextStyle(fontSize: 14, color: Colors.white),
-      //               ),
-      //             ],
-      //           ),
-      //         ),
-      //       ),
-      //     );
-      //   },
-      // );
-
     return GridView.builder(
       shrinkWrap: true,
       physics: NeverScrollableScrollPhysics(),
@@ -82,7 +27,9 @@ class ProductsArea extends StatelessWidget {
         return GestureDetector(
           onTap: () {
             Navigator.of(context).push(
-                MaterialPageRoute(builder: (context) => ProductDetailsScreen(product: product,))
+              MaterialPageRoute(
+                builder: (context) => ProductDetailsScreen(product: product),
+              ),
             );
           },
           child: Container(
@@ -98,84 +45,84 @@ class ProductsArea extends StatelessWidget {
                 ),
               ],
             ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+            child: Stack(
               children: [
-                Expanded(
-                  child: Stack(
-                    children: [
-                      Container(
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.vertical(
-                            top: Radius.circular(10),
-                          ),
-                          image: DecorationImage(
-                            image: CachedNetworkImageProvider(product.imageUrl),
-                            fit: BoxFit.cover,
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Expanded(
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.vertical(
+                          top: Radius.circular(10),
+                        ),
+                        child: CachedNetworkImage(
+                          imageUrl: 'https://images.pexels.com/photos/415829/pexels-photo-415829.jpeg?auto=compress&cs=tinysrgb&dpr=2&w=500',
+                          fit: BoxFit.cover,
+                          placeholder: (context, url) => Center(child: CircularProgressIndicator()),
+                          errorWidget: (context, url, error) => Icon(Icons.error),
+                        ),
+                      ),
+                    ),
+                    SizedBox(height: 10),
+                    Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 10),
+                      child: Text(
+                        product.name,
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 16,
+                        ),
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ),
+                    SizedBox(height: 5),
+                    Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 10),
+                      child: Text(
+                        '\$${product.price.toStringAsFixed(2)}',
+                        style: TextStyle(
+                          color: Colors.grey[700],
+                          fontSize: 14,
+                          decoration: product.hasDiscount ? TextDecoration.lineThrough : TextDecoration.none,
+                        ),
+                      ),
+                    ),
+                    if (product.hasDiscount)
+                      Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 10),
+                        child: Text(
+                          '\$${(product.price * (1 - product.discount / 100)).toStringAsFixed(2)}',
+                          style: TextStyle(
+                            color: Theme.of(context).primaryColor,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 14,
                           ),
                         ),
                       ),
-                      if (product.hasDiscount)
-                        Positioned(
-                          top: 5,
-                          left: 5,
-                          child: Container(
-                            padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                            decoration: BoxDecoration(
-                              color: Theme.of(context).primaryColor,
-                              borderRadius: BorderRadius.circular(10),
-                            ),
-                            child: Text(
-                              '-${product.discount.toString()}%',
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontWeight: FontWeight.bold,
-                                fontSize: 12,
-                              ),
-                            ),
-                          ),
-                        ),
-                    ],
-                  ),
-                ),
-                SizedBox(height: 10),
-                Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 10),
-                  child: Text(
-                    product.name,
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 16,
-                    ),
-                    maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                ),
-                SizedBox(height: 5),
-                Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 10),
-                  child: Text(
-                    '\$${product.price.toStringAsFixed(2)}',
-                    style: TextStyle(
-                      color: Colors.grey[700],
-                      fontSize: 14,
-                      decoration: product.hasDiscount ? TextDecoration.lineThrough : TextDecoration.none,
-                    ),
-                  ),
+                    SizedBox(height: 10),
+                  ],
                 ),
                 if (product.hasDiscount)
-                  Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 10),
-                    child: Text(
-                      '\$${(product.price * (1 - product.discount / 100)).toStringAsFixed(2)}',
-                      style: TextStyle(
+                  Positioned(
+                    top: 10,
+                    right: 10,
+                    child: Container(
+                      padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                      decoration: BoxDecoration(
                         color: Theme.of(context).primaryColor,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 14,
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child: Text(
+                        '-${product.discount.toString()}%',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 12,
+                        ),
                       ),
                     ),
                   ),
-                SizedBox(height: 10),
               ],
             ),
           ),

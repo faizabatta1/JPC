@@ -22,41 +22,46 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: BlocProvider(
-        create: (context) => RegisterBloc()..add(ResetRegisterInitial()),
-        child: Scaffold(
-          appBar: AppBar(
-            elevation: 0,
-          ),
-          body: BlocConsumer<RegisterBloc, RegisterState>(
-            listener: (context, state) {
-              if (state is RegisterSuccess) {
-                Navigator.of(context).pushReplacement(MaterialPageRoute(
-                    builder: (context) => AuthStatusWrapper()));
-              } else if (state is RegisterFailure) {
-                showSnackbar(context: context, message: state.message);
-              }
+    return BlocProvider(
+      create: (context) => RegisterBloc()..add(ResetRegisterInitial()),
+      child: Scaffold(
+        appBar: AppBar(
+          elevation: 0,
+          backgroundColor: Colors.transparent,
+          leading: IconButton(
+            onPressed: (){
+              Navigator.pop(context);
             },
-            builder: (context, state) {
-              if (state is RegisterInitial) {
-                return RegisterForm();
-              } else if (state is RegisterLoading) {
-                return const Center(
-                  child: CircularProgressIndicator(),
-                );
-              } else if (state is RegisterSuccess) {
-                return Container();
-              } else {
-                return const Center(
-                  child: Text(
-                    'state is not implemented',
-                    style: TextStyle(fontSize: 30),
-                  ),
-                );
-              }
-            },
+            icon: Icon(Icons.arrow_back,color: Colors.black,size: 30,),
           ),
+        ),
+        body: BlocConsumer<RegisterBloc, RegisterState>(
+          listener: (context, state) {
+            if (state is RegisterSuccess) {
+              Navigator.of(context).pushReplacement(MaterialPageRoute(
+                  builder: (context) => AuthStatusWrapper()));
+            } else if (state is RegisterFailure) {
+              showSnackbar(context: context, message: state.message);
+            }
+          },
+          builder: (context, state) {
+            if (state is RegisterInitial) {
+              return RegisterForm();
+            } else if (state is RegisterLoading) {
+              return const Center(
+                child: CircularProgressIndicator(),
+              );
+            } else if (state is RegisterSuccess) {
+              return Container();
+            } else {
+              return const Center(
+                child: Text(
+                  'state is not implemented',
+                  style: TextStyle(fontSize: 30),
+                ),
+              );
+            }
+          },
         ),
       ),
     );

@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 
 class ThemeHelper{
 
-  static Color primaryColor = Color(0xFF1D3557);
-  static Color secondaryColor = Color(0xFF457B9D);
-  static Color accentColor = Color(0xFFA8DADC);
+  static Color primaryColor = Color(0xff2a2f3f);
+  static Color secondaryColor = Color.fromARGB(255, 44, 62, 121);
+  static Color accentColor = Color(0xff6c90aa);
   static Color childMainComponentColor = Color(0xA8792B47);
   static Color scaffoldColor = Color(0xFFCED0CC);
   static ButtonStyle fullSizePrimaryButtonStyle(BuildContext context){

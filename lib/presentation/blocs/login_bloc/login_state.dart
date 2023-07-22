@@ -19,6 +19,26 @@ class LoginSuccess extends LoginState {
   List<Object?> get props => [];
 }
 
+class UserNotFound extends LoginState {
+  @override
+  List<Object?> get props => [];
+}
+
+class ServerError extends LoginState {
+  @override
+  List<Object?> get props => [];
+}
+
+class UnknownState extends LoginState {
+  @override
+  List<Object?> get props => [];
+}
+
+class WrongCredentials extends LoginState {
+  @override
+  List<Object?> get props => [];
+}
+
 class LoginFailure extends LoginState {
   final String message;
   const LoginFailure({required this.message});
