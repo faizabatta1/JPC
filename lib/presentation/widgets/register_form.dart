@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:intl_phone_field/country_picker_dialog.dart';
 import 'package:jpc/core/helpers/theme_helper.dart';
 import 'package:jpc/data/entities/user_auth_credentials.dart';
 import 'package:jpc/data/models/user_information.dart';
@@ -134,6 +135,11 @@ class _RegisterFormState extends State<RegisterForm> {
                       // Use Expanded to make the IntlPhoneField take available width
                       child: IntlPhoneField(
                         controller: phoneController,
+                        pickerDialogStyle: PickerDialogStyle(
+                          searchFieldInputDecoration:InputDecoration(
+
+                          )
+                        ),
                         keyboardType: TextInputType.phone,
                         decoration: InputDecoration(
                           hintText: 'PhoneNumber',
