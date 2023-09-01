@@ -45,7 +45,7 @@ class CartBloc extends Bloc<CartEvent, CartState> {
       IncreaseCartItemUseCase increaseCartItemUseCase = IncreaseCartItemUseCase(
         firestoreCartRemoteDataSource: FirestoreCartRemoteDataSource(),
         productId: event.productId,
-        uid: event.uid
+        uid: ''
       );
 
       Either<IncreaseCartItemError,bool> response = await increaseCartItemUseCase.execute();
@@ -53,10 +53,10 @@ class CartBloc extends Bloc<CartEvent, CartState> {
       response.fold(
               (increaseError){
                 emit(CartItemIncreaseError(message: increaseError.message));
-                add(LoadCartItems(uid: event.uid));
+                add(LoadCartItems(uid: ''));
               },
               (success){
-                add(LoadCartItems(uid: event.uid));
+                add(LoadCartItems(uid: ''));
               }
       );
     });
@@ -64,7 +64,7 @@ class CartBloc extends Bloc<CartEvent, CartState> {
     on<DecreaseQuantityEvent>((event,emit) async{
       DecreaseCartItemUseCase decreaseCartItemUseCase = DecreaseCartItemUseCase(
         firestoreCartRemoteDataSource: FirestoreCartRemoteDataSource(),
-        uid: event.uid,
+        uid: '',
         productId: event.productId
       );
 
@@ -73,10 +73,10 @@ class CartBloc extends Bloc<CartEvent, CartState> {
       response.fold(
               (increaseError){
                 emit(CartDecreaseItemError(message: increaseError.message));
-                add(LoadCartItems(uid: event.uid));
+                add(LoadCartItems(uid: ''));
               },
               (success){
-                add(LoadCartItems(uid: event.uid));
+                add(LoadCartItems(uid: ''));
               }
       );
     });

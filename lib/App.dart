@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:jpc/presentation/screens/home_screen.dart';
+import 'package:jpc/presentation/screens/more_screen.dart';
+import 'package:jpc/presentation/screens/products_screen.dart';
 import 'package:jpc/presentation/wrappers/auth_status_wrapper.dart';
 
 import 'core/helpers/theme_helper.dart';
@@ -22,7 +25,7 @@ class _AppState extends State<App> {
           backgroundColor: ThemeHelper.primaryColor
         )
       ),
-      home: const AuthStatusWrapper(),
+      home:  AuthStatusWrapper(),
     );
   }
 }

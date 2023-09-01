@@ -6,12 +6,6 @@ import 'package:jpc/data/datasource/remote/users_data/firestore_users_remote_dat
 import 'package:jpc/data/models/cart_item.dart';
 
 import '../../core/use_case/use_case.dart';
-import 'package:jpc/core/error_handling/user_login_error.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import '../../core/use_case/use_case_params.dart';
-import '../../data/entities/user_auth_credentials.dart';
-import '../../data/models/product.dart';
-import '../../data/repositories/user_authentication_repository_impl.dart';
 
 
 

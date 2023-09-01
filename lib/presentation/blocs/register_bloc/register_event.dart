@@ -6,11 +6,10 @@ abstract class RegisterEvent extends Equatable {
 
 class RegisterButtonPressed extends RegisterEvent{
   final UserInformation userInformation;
-  final UserAuthCredentials userAuthCredentials;
-  const RegisterButtonPressed({required this.userInformation,required this.userAuthCredentials});
+  const RegisterButtonPressed({required this.userInformation});
 
   @override
-  List<Object?> get props => [userInformation,userAuthCredentials];
+  List<Object?> get props => [userInformation];
 }
 
 class ResetRegisterInitial extends RegisterEvent{

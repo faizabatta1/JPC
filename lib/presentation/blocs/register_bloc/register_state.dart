@@ -15,6 +15,10 @@ class RegisterLoading extends RegisterState{
 }
 
 class RegisterSuccess extends RegisterState{
+  final String message;
+
+  const RegisterSuccess({ required this.message });
+
   @override
   List<Object?> get props => [];
 }

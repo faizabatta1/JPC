@@ -53,15 +53,12 @@ dependencies:
   auto_size_text: ^3.0.0
   permission_handler: ^10.2.0
   dartz: ^0.10.1
-  firebase_auth: ^4.3.0
-  firebase_core: ^2.8.0
-  firebase_messaging: ^14.3.0
   flutter_local_notifications: ^13.0.0
-  cloud_firestore: ^4.4.5
   connectivity_plus: ^3.0.3
   shared_preferences: ^2.0.18
   url_launcher: ^6.1.10
   flutter_credit_card: ^3.0.6
+  hydrated_bloc:
   http: ^0.13.5
   image_picker: ^0.8.7
   google_mobile_ads:

@@ -15,6 +15,11 @@ class AuthUserNotActiveEvent extends AuthStatusEvent{
   @override
   List<Object?> get props => [];
 }
+
+class SignOutEvent extends AuthStatusEvent{
+  @override
+  List<Object?> get props => [];
+}
 //
 // class SendVerificationCodeEvent extends AuthStatusEvent{
 //   @override

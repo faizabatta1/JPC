@@ -80,7 +80,7 @@ class _UserProfileContentState extends State<UserProfileContent> {
                   ),
                   SizedBox(height: 8),
                   Text(
-                    widget.userInformation.address,
+                    widget.userInformation.location,
                     style: TextStyle(
                       fontSize: 18,
                     ),

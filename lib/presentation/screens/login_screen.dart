@@ -33,14 +33,12 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-      ),
-      body: SingleChildScrollView(
+      body: Form(
+        key: _formKey,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            SizedBox(height: 60,),
             Container(
               alignment: Alignment.center,
               child: Text(
@@ -56,7 +54,7 @@ class _LoginScreenState extends State<LoginScreen> {
               height: 50,
             ),
             Padding(
-              padding: const EdgeInsets.only(left: 20),
+              padding: const EdgeInsets.only(left: 8),
               child: Text(
                 "Login to your Account",
                 style: TextStyle(
@@ -65,50 +63,75 @@ class _LoginScreenState extends State<LoginScreen> {
                     fontWeight: FontWeight.bold),
               ),
             ),
-            Card(
-              margin: EdgeInsets.only(left: 30, top: 30),
-              elevation: 3,
-              child: Container(
-                margin: EdgeInsets.only(left: 10),
-                width: 320,
-                height: 50,
-                color: Colors.white,
-                child: TextFormField(
-                  controller: _emailController,
-                  decoration: InputDecoration(
-                      hintText: 'Email',
-                      hintStyle: TextStyle(
-                        color: Colors.grey,
-                        fontWeight: FontWeight.bold,
-                      ),
-                      border: InputBorder.none),
-                ),
+            SizedBox(height: 12.0,),
+            Container(
+              margin: EdgeInsets.symmetric(horizontal: 12.0),
+              child: TextFormField(
+                controller: _emailController,
+                autovalidateMode: AutovalidateMode.onUserInteraction,
+                keyboardType: TextInputType.emailAddress,
+                validator: (value){
+                  if(value != null){
+                    if(value.isEmpty){
+                      return "Please enter something";
+                    }else if(!RegExp(r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+").hasMatch(value)){
+                      return "This is not an email";
+                    }
+
+                    return null;
+                  }
+
+                  return null;
+                },
+                decoration: InputDecoration(
+                    hintText: 'Email',
+                    labelText: 'Email',
+                    hintStyle: TextStyle(
+                      color: Colors.grey,
+                      fontWeight: FontWeight.bold,
+                    ),
+                    border: OutlineInputBorder()),
               ),
             ),
             SizedBox(
               height: 10,
             ),
-            Card(
-              margin: EdgeInsets.only(left: 30, top: 30),
-              elevation: 3,
-              child: Container(
-                margin: EdgeInsets.only(left: 10),
-                width: 320,
-                height: 50,
-                color: Colors.white,
-                child: TextFormField(
-                  controller: _passwordController,
-                  decoration: InputDecoration(
-                      hintText: 'Password',
-                      hintStyle: TextStyle(
-                        color: Colors.grey,
-                        fontWeight: FontWeight.bold,
-                      ),
-                      border: InputBorder.none),
-                ),
+            Container(
+              margin: EdgeInsets.symmetric(horizontal: 12.0),
+              child: TextFormField(
+                controller: _passwordController,
+                validator: (value){
+                  if(value != null){
+                    if(value.isEmpty){
+                      return "Please enter password";
+                    }
+
+                    return null;
+                  }
+
+                  return null;
+                },
+                decoration: InputDecoration(
+                    hintText: 'Password',
+                    labelText: 'Password',
+                    hintStyle: TextStyle(
+                      color: Colors.grey,
+                      fontWeight: FontWeight.bold,
+                    ),
+                    border: OutlineInputBorder()),
               ),
             ),
-            SizedBox(height: 24.0,),
+            Align(
+              alignment: Alignment.centerRight,
+              child: TextButton(
+                onPressed: (){},
+                child: Text('Forget password',style: TextStyle(
+                  fontSize: 16,
+                  color: ThemeHelper.accentColor
+                ),),
+              ),
+            ),
+            SizedBox(height: 0.0,),
             Center(
               child: Container(
                 width: 180,
@@ -120,14 +143,22 @@ class _LoginScreenState extends State<LoginScreen> {
                   shape: ContinuousRectangleBorder(
                       borderRadius: BorderRadius.circular(20)),
                   onPressed: () {
-                    final UserAuthCredentials userAuthCredentials = UserAuthCredentials(
-                        email: _emailController.text,
-                        password: _passwordController.text
-                    );
+                    if(_formKey.currentState != null){
+                      if(_formKey.currentState!.validate()){
+                        final UserAuthCredentials userAuthCredentials = UserAuthCredentials(
+                            email: _emailController.text,
+                            password: _passwordController.text
+                        );
 
-                    context.read<LoginBloc>().add(
-                      LoginButtonPressed(userAuthCredentials: userAuthCredentials)
-                    );
+                        context.read<LoginBloc>().add(
+                            LoginButtonPressed(userAuthCredentials: userAuthCredentials)
+                        );
+                      }else{
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(content: Text('Enter Correct Data'))
+                        );
+                      }
+                    }
                   },
                   child: Text(
                     "sign in",
@@ -136,42 +167,14 @@ class _LoginScreenState extends State<LoginScreen> {
                 ),
               ),
             ),
-            SizedBox(
-              height: 100,
-            ),
-            Container(
-              alignment: Alignment.center,
-              child: Text(
-                "- Or Sign in with -",
-                style:
-                TextStyle(color: Colors.grey, fontWeight: FontWeight.bold, fontSize: 20),
-              ),
-            ),
-            SizedBox(
-              height: 20,
-            ),
-            Container(
-              padding: EdgeInsets.symmetric(horizontal: 20.0),
-              child: ElevatedButton.icon(
-                onPressed: (){},
-                icon: Icon(FontAwesomeIcons.google),
-                label: Text("Google",
-                  style: TextStyle(fontSize: 20),),
-                style: ElevatedButton.styleFrom(
-                  minimumSize: Size(double.infinity, 50)
-                ),
-              ),
-            ),
-            SizedBox(
-              height: 40,
-            ),
+            SizedBox(height: 12,),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(
-                  "Don’t have an Account ? ",
+                  "Don’t have an Account  ",
                   style: TextStyle(
-                      color: Colors.grey, fontWeight: FontWeight.bold),
+                      color: Colors.grey, fontWeight: FontWeight.bold,fontSize: 18),
                 ),
                 GestureDetector(
                   onTap: () {
@@ -181,11 +184,22 @@ class _LoginScreenState extends State<LoginScreen> {
                     "SignUp ",
                     style: TextStyle(
                         color: ThemeHelper.accentColor,
-                        fontWeight: FontWeight.bold),
+                        fontWeight: FontWeight.bold,fontSize: 18),
                   ),
                 ),
               ],
-            )
+            ),
+            Align(
+              alignment: Alignment.center,
+              child: TextButton(
+                onPressed: (){},
+                child: Text('Are you a provider',style: TextStyle(
+                  fontSize: 16,
+                  color: Colors.blueGrey
+                ),),
+              ),
+            ),
+            SizedBox(height: 12.0,)
           ],
         ),
       ),

@@ -1,4 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:jpc/data/models/product.dart';
 
 class CartItem{
@@ -17,10 +16,10 @@ class CartItem{
     );
   }
 
-  factory CartItem.fromSnapshot(QueryDocumentSnapshot snapshot){
+  factory CartItem.fromSnapshot(Map snapshot){
     return CartItem(
         product: Product.fromSnapshot(snapshot),
-        quantity: snapshot.get('quantity')
+        quantity: snapshot['quantity']
     );
   }
 

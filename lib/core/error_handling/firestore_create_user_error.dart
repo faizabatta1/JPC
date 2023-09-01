@@ -1,5 +1,5 @@
 import 'Failure.dart';
 
-class FirestoreCreateUserError extends Failure{
-  FirestoreCreateUserError(super.message);
+class CreateUserError extends Failure{
+  CreateUserError(super.message);
 }

@@ -1,4 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 
 class Product{
   final String name;
@@ -19,9 +18,8 @@ class Product{
     required this.id
   });
   
-  factory Product.fromSnapshot(DocumentSnapshot document){
-    Map data = document.data() as Map;
-    
+  factory Product.fromSnapshot(Map data){
+
     return Product(
       name: data['name'],
       description: data['description'],

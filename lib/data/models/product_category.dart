@@ -1,4 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 
 class ProductCategory{
   final String name;
@@ -6,7 +5,7 @@ class ProductCategory{
 
   ProductCategory({ required this.name , this.id});
 
-  factory ProductCategory.fromSnapshot(QueryDocumentSnapshot snapshot){
-    return ProductCategory(name: snapshot.get('name'),id: snapshot.id);
+  factory ProductCategory.fromSnapshot(Map snapshot){
+    return ProductCategory(name: snapshot['name'],id: snapshot['id']);
   }
 }

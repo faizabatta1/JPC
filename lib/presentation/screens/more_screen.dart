@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_social_button/flutter_social_button.dart';
+import 'package:jpc/presentation/blocs/auth_status/auth_status_bloc.dart';
 import 'package:jpc/presentation/screens/about_screen.dart';
 import 'package:jpc/presentation/screens/orders_list_screen.dart';
 import 'package:jpc/presentation/screens/products_screen.dart';
@@ -133,12 +135,10 @@ class _MoreScreenState extends State<MoreScreen> {
                   buildMenuItem(
                     iconData: FontAwesomeIcons.arrowRightFromBracket,
                     text: 'Logout',
-                    onTap: () async {
-                      // SharedPreferences shared = await SharedPreferences.getInstance();
-                      // await shared.remove('token');
-                      // Navigator.of(context).pushReplacement(
-                      //   MaterialPageRoute(builder: (context) => SplachScreen(token: null)),
-                      // );
+                    onTap: () {
+                      context.read<AuthStatusBloc>().add(
+                        SignOutEvent()
+                      );
                     },
                   ),
                 ],

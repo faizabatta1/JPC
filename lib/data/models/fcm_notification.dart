@@ -1,4 +1,3 @@
-import 'package:firebase_messaging/firebase_messaging.dart';
 
 class FCMNotification{
   final String title;
@@ -19,13 +18,12 @@ class FCMNotification{
     );
   }
 
-  factory FCMNotification.fromRemote(RemoteMessage message){
-    RemoteNotification? notification = message.notification;
+  factory FCMNotification.fromRemote(Map notification){
 
     if(notification != null){
       return FCMNotification(
-        title: notification.title!,
-        body: notification.body!,
+        title: notification['title']!,
+        body: notification['body'],
         sendTime: DateTime.now().toString()
       );
     }else{

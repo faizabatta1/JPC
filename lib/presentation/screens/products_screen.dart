@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:jpc/core/helpers/theme_helper.dart';
 import 'package:jpc/presentation/screens/cart_screen.dart';
 import '../../data/models/product_category.dart';
@@ -184,53 +183,55 @@ class _ProductsScreenState extends State<ProductsScreen> {
 class CategoryList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return StreamBuilder<QuerySnapshot>(
-      stream: FirebaseFirestore.instance.collection('products-categories').snapshots(),
-      builder: (context, snapshot) {
-        if (snapshot.hasData) {
-          final categories = snapshot.data!.docs.map((doc) => ProductCategory.fromSnapshot(doc)).toList();
-          return SingleChildScrollView(
-            scrollDirection: Axis.horizontal,
-            child: Row(
-              children: categories
-                  .map(
-                    (category) => GestureDetector(
-                  onTap: () {
-                    context.read<ProductsBloc>().add(LoadProductsEvent(categoryId: category.id!));
-                  },
-                  child: Container(
-                    width: 120,
-                    alignment: Alignment.center,
-                    padding: EdgeInsets.symmetric(horizontal: 15, vertical: 5),
-                    margin: EdgeInsets.all(8.0),
-                    child: Text(
-                      category.name,
-                      style: TextStyle(color: Theme.of(context).primaryColor),
-                    ),
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(8.0),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.grey.withOpacity(0.3),
-                          spreadRadius: 2,
-                          blurRadius: 5,
-                          offset: Offset(0, 3),
-                        ),
-                      ],
-                    ),
+    return ProductsCategories(categories: []);
+  }
+}
+
+class ProductsCategories extends StatelessWidget {
+  const ProductsCategories({
+    super.key,
+    required this.categories,
+  });
+
+  final categories;
+
+  @override
+  Widget build(BuildContext context) {
+    return SingleChildScrollView(
+      scrollDirection: Axis.horizontal,
+      child: Row(
+        children: categories
+            .map(
+              (category) => GestureDetector(
+            onTap: () {
+              context.read<ProductsBloc>().add(LoadProductsEvent(categoryId: category.id!));
+            },
+            child: Container(
+              width: 120,
+              alignment: Alignment.center,
+              padding: EdgeInsets.symmetric(horizontal: 15, vertical: 5),
+              margin: EdgeInsets.all(8.0),
+              child: Text(
+                category.name,
+                style: TextStyle(color: Theme.of(context).primaryColor),
+              ),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(8.0),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.grey.withOpacity(0.3),
+                    spreadRadius: 2,
+                    blurRadius: 5,
+                    offset: Offset(0, 3),
                   ),
-                ),
-              )
-                  .toList(),
+                ],
+              ),
             ),
-          );
-        } else if (snapshot.hasError) {
-          return Text('Something went wrong');
-        } else {
-          return CircularProgressIndicator();
-        }
-      },
+          ),
+        )
+            .toList(),
+      ),
     );
   }
 }

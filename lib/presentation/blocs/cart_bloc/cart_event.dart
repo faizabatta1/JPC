@@ -13,23 +13,21 @@ class LoadCartItems extends CartEvent{
 }
 
 class IncreaseQuantityEvent extends CartEvent{
-  final String uid;
   final int productId;
 
-  const IncreaseQuantityEvent({ required this.productId, required this.uid });
+  const IncreaseQuantityEvent({ required this.productId });
 
   @override
-  List<Object?> get props => [uid,productId];
+  List<Object?> get props => [productId];
 }
 
 class DecreaseQuantityEvent extends CartEvent{
-  final String uid;
   final int productId;
 
-  const DecreaseQuantityEvent({ required this.uid, required this.productId });
+  const DecreaseQuantityEvent({ required this.productId });
 
   @override
-  List<Object?> get props => [uid,productId];
+  List<Object?> get props => [productId];
 }
 
 class DeleteCartItemEvent extends CartEvent{

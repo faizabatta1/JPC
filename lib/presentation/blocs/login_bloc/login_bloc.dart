@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'package:dartz/dartz.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:jpc/core/error_handling/user_login_error.dart';
 import 'package:jpc/data/entities/user_auth_credentials.dart';
 
@@ -21,32 +20,40 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
     on<LoginEvent>((event, emit) async{
       if(event is LoginButtonPressed){
         emit(LoginLoading());
+
         final LoginUseCase loginUseCase = LoginUseCase(
             userAuthenticationRepositoryImpl: userAuthenticationRepositoryImpl,
             userAuthCredentials: event.userAuthCredentials
         );
 
-        Either<UserLoginError,({ bool state, LoginStatus loginStatus })> response = await loginUseCase.execute();
+        Either<UserLoginError,({ bool state, LoginStatus loginStatus, Map? data })> response = await loginUseCase.execute();
 
-        response.fold(
+        await response.fold(
           (userLoginError){
             emit(LoginFailure(message: userLoginError.message));
             emit(LoginInitial());
           },
           (response) async{
-            // final SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+            final SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
             switch(response.loginStatus){
 
               case LoginStatus.success:
-                return emit(LoginSuccess());
+                print('yes am here');
+                await sharedPreferences.setString('token', response.data!['token']);
+                emit(LoginSuccess());
+                break;
               case LoginStatus.notFound:
-                return emit(UserNotFound());
+                emit(UserNotFound());
+                break;
               case LoginStatus.wrongCredentials:
-                return emit(WrongCredentials());
+                emit(WrongCredentials());
+                break;
               case LoginStatus.serverError:
-                return emit(ServerError());
+                emit(ServerError());
+                break;
               case LoginStatus.unknown:
-                return emit(UnknownState());
+                emit(UnknownState());
+                break;
       }
           }
         );

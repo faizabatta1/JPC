@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:dartz/dartz.dart';
 import 'package:equatable/equatable.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:jpc/core/error_handling/add_product_to_cart_error.dart';
 import 'package:jpc/data/datasource/remote/products_data/firestore_products_remote_data_source.dart';
 import 'package:jpc/data/models/cart_item.dart';
@@ -20,7 +19,7 @@ class ProductDetailsBloc extends Bloc<ProductDetailsEvent, ProductDetailsState> 
       emit(ProductLoading());
       AddToCartUseCase addToCartUseCase = AddToCartUseCase(
         cartItem: event.cartItem,
-        uid: FirebaseAuth.instance.currentUser!.uid,
+        uid: '',
         firestoreProductsRemoteDataSource: FirestoreProductsRemoteDataSource()
       );
 

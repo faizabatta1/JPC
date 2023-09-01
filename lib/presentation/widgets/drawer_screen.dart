@@ -1,4 +1,3 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:jpc/core/helpers/theme_helper.dart';
 import 'package:jpc/presentation/screens/about_screen.dart';
@@ -96,7 +95,7 @@ class DrawerScreen extends StatelessWidget {
                     leading: const Icon(Icons.logout),
                     title: const Text('تسجيل الخروج'),
                     onTap: () async{
-                      await FirebaseAuth.instance.signOut();
+
                     },
                   ),
                 ],

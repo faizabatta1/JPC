@@ -10,7 +10,6 @@ import 'package:country_code_picker/country_code_picker.dart';
 import 'package:jpc/presentation/blocs/register_bloc/register_bloc.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../core/utils/cloud_messaging.dart';
 
 class RegisterForm extends StatefulWidget {
   const RegisterForm({Key? key}) : super(key: key);
@@ -88,8 +87,9 @@ class _RegisterFormState extends State<RegisterForm> {
               height: 50,
               color: Colors.white,
               child: TextFormField(
+                controller: usernameController,
                 decoration: InputDecoration(
-                    hintText: ' Name',
+                    hintText: 'Username',
                     hintStyle: TextStyle(
                       color: Colors.grey,
                       fontWeight: FontWeight.bold,
@@ -107,6 +107,7 @@ class _RegisterFormState extends State<RegisterForm> {
               height: 50,
               color: Colors.white,
               child: TextFormField(
+                controller: emailController,
                 decoration: InputDecoration(
                     hintText: 'Email',
                     hintStyle: TextStyle(
@@ -175,9 +176,7 @@ class _RegisterFormState extends State<RegisterForm> {
                     padding: const EdgeInsets.symmetric(horizontal: 8.0),
                     child: CountryCodePicker(
                       onChanged: (country) {
-                        // Handle the country code selection
-                        print(country.name);
-                        print(country.code);
+                        addressController.text = country.name ?? '';
                       },
                       // Optional: Set the initial country code
                       initialSelection: 'PS',
@@ -206,6 +205,7 @@ class _RegisterFormState extends State<RegisterForm> {
               height: 50,
               color: Colors.white,
               child: TextFormField(
+                controller: passwordController,
                 decoration: InputDecoration(
                     hintText: 'Password',
                     hintStyle: TextStyle(
@@ -232,7 +232,22 @@ class _RegisterFormState extends State<RegisterForm> {
                 color: ThemeHelper.primaryColor,
                 shape: ContinuousRectangleBorder(
                     borderRadius: BorderRadius.circular(20)),
-                onPressed: () {},
+                onPressed: () async{
+
+                  UserInformation userInformation = UserInformation(
+                      username: usernameController.text,
+                      phone: phoneController.text,
+                      location: addressController.text,
+                      email: emailController.text,
+                    password: passwordController.text
+                  );
+
+                  context.read<RegisterBloc>().add(
+                    RegisterButtonPressed(
+                        userInformation: userInformation,
+                    )
+                  );
+                },
                 child: Text(
                   "sign up ",
                   style: TextStyle(color: Colors.white,fontSize: 20),

@@ -1,43 +1,43 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
+
+import 'dart:convert';
 
 class UserInformation{
   final String username;
   final String phone;
-  final String address;
+  final String location;
   final String email;
-  final String deviceToken;
-  String? uid = '';
+  String? password;
+  String? id = '';
 
   UserInformation({
     required this.username,
     required this.phone,
-    required this.address,
+    required this.location,
     required this.email,
-    required this.deviceToken,
-    this.uid
+    required this.password,
+    this.id
   });
 
-  factory UserInformation.fromFirestore(DocumentSnapshot document){
-    Map data = document.data() as Map;
+  factory UserInformation.fromJson(Map data){
 
     return UserInformation(
       username: data['username'],
       phone: data['phone'],
-      address: data['address'],
-      uid: data['uid'],
+      location: data['location'],
+      id: data['id'],
+      password: data['password'],
       email: data['email'] ?? '',
-      deviceToken: data['deviceToken'] ?? ''
     );
   }
 
-  Map<String,dynamic> toFirestore(){
-    return {
+  String toJsonEncoded(){
+    return jsonEncode({
       'username': username,
       'phone': phone,
-      'address': address,
-      'uid': uid,
+      'location': location,
+      'id': id,
       'email': email,
-      'deviceToken': deviceToken
-    };
+      'password': password,
+    });
   }
 }

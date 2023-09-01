@@ -3,7 +3,6 @@ import 'dart:math';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:jpc/data/datasource/remote/users_data/firestore_users_remote_data_source.dart';
 import 'package:jpc/data/models/user_information.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -49,21 +48,11 @@ class AuthStatusBloc extends Bloc<AuthStatusEvent, AuthStatusState> {
 
       }else if(event is AuthUserNotActiveEvent){
         emit(UserNotLoggedInState());
+      }else if(event is SignOutEvent){
+        final SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+        await sharedPreferences.remove('token');
+        sink.add(AuthUserNotActiveEvent());
       }
-
-      // else if(event is SendVerificationCodeEvent){
-      //   await firebaseAuth.currentUser!.sendEmailVerification().whenComplete((){
-      //     emit(VerificationLinkSentSuccessfully());
-      //   }).catchError((onError){
-      //     emit(VerificationLinkFailedToSend());
-      //   });
-      // }else if(event is EmailVerifiedEvent){
-      //   if(firebaseAuth.currentUser!.emailVerified){
-      //     emit(UserLoggedInState());
-      //   }else{
-      //     emit(VerificationLinkSentSuccessfully());
-      //   }
-      // }
     });
   }
 }

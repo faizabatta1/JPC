@@ -2,7 +2,6 @@ import 'dart:math';
 
 import 'package:bloc/bloc.dart' show Bloc;
 import 'package:equatable/equatable.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
@@ -15,26 +14,9 @@ part 'notifications_event.dart';
 part 'notifications_state.dart';
 
 void requestPermission() async {
-  FirebaseMessaging messaging = FirebaseMessaging.instance;
 
-  NotificationSettings settings = await messaging.requestPermission(
-    alert: true,
-    announcement: false,
-    badge: true,
-    carPlay: false,
-    criticalAlert: false,
-    provisional: false,
-    sound: true,
-  );
 
-  if (settings.authorizationStatus == AuthorizationStatus.authorized) {
-    print('User granted permission');
-  } else if (settings.authorizationStatus ==
-      AuthorizationStatus.provisional) {
-    print('User granted provisional permission');
-  } else {
-    print('User declined or has not accepted permission');
-  }
+
 }
 
 var channel;
@@ -58,35 +40,6 @@ void loadFCM() async {
 }
 
 void listenFCM() async {
-  // FirebaseMessaging.instance.subscribeToTopic('/updates');
-
-  FirebaseMessaging.onMessage.listen((RemoteMessage message) async{
-    RemoteNotification? notification = message.notification;
-    AndroidNotification? android = message.notification?.android;
-    var initializationSettingsAndroid =  AndroidInitializationSettings('logo');
-    if (notification != null && android != null) {
-      if (kDebugMode) {
-        print({
-        'random': message.data['random'],
-        'title': notification.title!,
-        'body': notification.body!
-      });
-      }
-
-      flutterLocalNotificationsPlugin.show(
-        notification.hashCode,
-        notification.title,
-        notification.body,
-        NotificationDetails(
-          android: AndroidNotificationDetails(
-            channel.id,
-            channel.name,
-            icon: initializationSettingsAndroid.defaultIcon,
-          ),
-        ),
-      );
-    }
-  });
 }
 
 class NotificationsBloc extends Bloc<NotificationsEvent, NotificationState> {
