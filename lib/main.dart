@@ -5,6 +5,8 @@ import 'package:flutter_stripe/flutter_stripe.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:jpc/presentation/blocs/auth_status/auth_status_bloc.dart';
 import 'package:jpc/presentation/blocs/cart_bloc/cart_bloc.dart';
+import 'package:jpc/presentation/blocs/merchant_login_bloc/merchant_login_bloc.dart';
+import 'package:jpc/presentation/blocs/merchant_register_bloc/merchant_register_bloc.dart';
 import 'package:jpc/presentation/blocs/notifications_bloc/notifications_bloc.dart';
 import 'package:jpc/presentation/blocs/product_details_bloc/product_details_bloc.dart';
 import 'package:jpc/presentation/blocs/products_bloc/products_bloc.dart';
@@ -48,6 +50,8 @@ class MyApp extends StatelessWidget {
         BlocProvider(create: (context) => ProductsBloc()),
         BlocProvider(create: (context) => ProductDetailsBloc()),
         BlocProvider(create: (context) => CartBloc()),
+        BlocProvider(create: (context) => MerchantLoginBloc()),
+        BlocProvider(create: (context) => MerchantRegisterBloc()),
       ],
       child: App(),
     );

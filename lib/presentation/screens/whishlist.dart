@@ -103,7 +103,7 @@ class _WishlistScreenState extends State<WishlistScreen> {
             context,
             MaterialPageRoute(
               builder: (context) => ProductDetailsScreen(
-                product: Product.fromMap(_wishlistedProducts[index]),
+                product: Product.fromJson(_wishlistedProducts[index]),
               ),
             ),
           );

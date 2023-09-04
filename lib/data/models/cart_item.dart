@@ -11,15 +11,15 @@ class CartItem{
 
   factory CartItem.fromMap(Map map){
     return CartItem(
-      product: Product.fromMap(map),
+      product: Product.fromJson(map),
       quantity: map['quantity']
     );
   }
 
-  factory CartItem.fromSnapshot(Map snapshot){
+  factory CartItem.fromSnapshot(Map json){
     return CartItem(
-        product: Product.fromSnapshot(snapshot),
-        quantity: snapshot['quantity']
+        product: Product.fromJson(json),
+        quantity: json['quantity']
     );
   }
 

@@ -20,7 +20,7 @@ class ProductsBloc extends Bloc<ProductsEvent, ProductState> {
     on<LoadProductsEvent>((event, emit) async{
       emit(state.copyWith(status:  ProductsStatus.loading));
       return await Future.delayed(Duration(seconds: 3),()async{
-        List<Product> products = [].map((e) => Product.fromSnapshot(e)).toList();
+        List<Product> products = [].map((e) => Product.fromJson(e)).toList();
 
         if(products.isEmpty){
           return emit(
@@ -40,7 +40,7 @@ class ProductsBloc extends Bloc<ProductsEvent, ProductState> {
 
       List<Product> results = state.products.where((element) => element.name.toLowerCase().contains(event.query.toLowerCase())).toList();
 
-      List<Product> products = [].map((e) => Product.fromSnapshot(e)).toList();
+      List<Product> products = [].map((e) => Product.fromJson(e)).toList();
 
       if(event.query.isEmpty) return emit(state.copyWith(products: products,status: ProductsStatus.success));
       if(results.isEmpty){

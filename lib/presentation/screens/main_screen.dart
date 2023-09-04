@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:jpc/core/helpers/theme_helper.dart';
+import 'package:jpc/data/datasource/remote/category_data/category_data.dart';
 import 'package:jpc/presentation/widgets/main_app_bar_component.dart';
+
+import '../../data/models/category.dart';
 
 class MainScreen extends StatefulWidget {
   const MainScreen({Key? key}) : super(key: key);
@@ -97,17 +100,44 @@ class _MainScreenState extends State<MainScreen> {
               ),
             ),
             SizedBox(height: 8),
-            Container(
-              height: 120,
-              child: ListView(
-                scrollDirection: Axis.horizontal,
-                padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                children: [
-                  _buildCategoryItem('Men\'s Fashion', 'assets/offer.jpg'),
-                  _buildCategoryItem('Women\'s Fashion', 'assets/offer.jpg'),
-                  _buildCategoryItem('Accessories', 'assets/offer.jpg'),
-                ],
-              ),
+            FutureBuilder(
+                future: CategoryData.getAllCategories(),
+              builder: (BuildContext context, AsyncSnapshot<List<Category>> snapshot) {
+                  if(snapshot.connectionState == ConnectionState.waiting){
+                    return Center(
+                      child: CircularProgressIndicator(),
+                    );
+                  }
+
+                  if(snapshot.hasError){
+                    return Center(
+                      child: Text('Something went Wrong'),
+                    );
+                  }
+
+                  if(snapshot.data != null){
+                    if(snapshot.data!.isEmpty){
+                      return Center(
+                        child: Text('No Categories Yet'),
+                      );
+                    }
+
+                    List<Category> categories = snapshot.data!;
+
+                    return Container(
+                      height: 120,
+                      child: ListView(
+                        scrollDirection: Axis.horizontal,
+                        padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                        children: categories.map((category){
+                          return _buildCategoryItem(category.name, 'assets/offer.jpg');
+                        }).toList(),
+                      ),
+                    );
+                  }
+
+                  return Container();
+              },
             ),
             SizedBox(height: 16),
             Padding(

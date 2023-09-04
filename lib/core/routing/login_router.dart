@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:jpc/presentation/screens/login_screen.dart';
+import 'package:jpc/presentation/screens/merchant_login_screen_navigator.dart';
 import 'package:jpc/presentation/screens/unknown_route_screen.dart';
 
 import '../../presentation/screens/login_screen_navigator.dart';
@@ -26,6 +27,21 @@ class LoginRouter{
               child: child,
             );
           }
+        );
+
+      case MerchantLoginScreenNavigator.merchantLogin:
+        return PageRouteBuilder(
+            pageBuilder: (context,animation,secondaryAnimation) => MerchantLoginScreenNavigator(),
+            transitionDuration: Duration(milliseconds: 300),
+            transitionsBuilder: (context,animation,secondaryAnimation,child){
+              return SlideTransition(
+                position: animation.drive(Tween(begin: Offset(1.0,0.0),end: Offset.zero).chain(
+                    CurveTween(curve: Curves.ease)
+                )),
+
+                child: child,
+              );
+            }
         );
 
       case ResetPasswordScreen.reset:

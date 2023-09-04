@@ -1,29 +1,20 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
-import 'package:flutter_social_button/flutter_social_button.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:google_mobile_ads/google_mobile_ads.dart';
-import 'package:jpc/core/helpers/theme_helper.dart';
-import 'package:jpc/presentation/screens/merchant_login_screen_navigator.dart';
-import 'package:jpc/presentation/screens/register_screen.dart';
-import 'package:jpc/presentation/screens/reset_password.dart';
-import 'package:auto_size_text/auto_size_text.dart';
-import 'package:jpc/data/entities/user_auth_credentials.dart';
-import 'package:jpc/presentation/blocs/login_bloc/login_bloc.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:http/http.dart' as http;
+import 'package:google_fonts/google_fonts.dart';
+import 'package:jpc/data/entities/merchant_auth_credentials.dart';
 
-class LoginScreen extends StatefulWidget {
-  const LoginScreen({Key? key}) : super(key: key);
+import '../../core/helpers/theme_helper.dart';
+import '../blocs/merchant_login_bloc/merchant_login_bloc.dart';
+import 'merchant_register_screen.dart';
+
+class MerchantLoginScreen extends StatefulWidget {
+  const MerchantLoginScreen({Key? key}) : super(key: key);
 
   @override
-  State<LoginScreen> createState() => _LoginScreenState();
+  State<MerchantLoginScreen> createState() => _MerchantLoginScreenState();
 }
 
-class _LoginScreenState extends State<LoginScreen> {
-
+class _MerchantLoginScreenState extends State<MerchantLoginScreen> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
 
@@ -58,7 +49,7 @@ class _LoginScreenState extends State<LoginScreen> {
               Padding(
                 padding: const EdgeInsets.only(left: 8),
                 child: Text(
-                  "Login to your Account",
+                  "Login to your Merchant Account",
                   style: TextStyle(
                       color: Colors.grey[700],
                       fontSize: 17,
@@ -128,8 +119,8 @@ class _LoginScreenState extends State<LoginScreen> {
                 child: TextButton(
                   onPressed: (){},
                   child: Text('Forget password',style: TextStyle(
-                    fontSize: 16,
-                    color: ThemeHelper.accentColor
+                      fontSize: 16,
+                      color: ThemeHelper.accentColor
                   ),),
                 ),
               ),
@@ -147,17 +138,17 @@ class _LoginScreenState extends State<LoginScreen> {
                     onPressed: () {
                       if(_formKey.currentState != null){
                         if(_formKey.currentState!.validate()){
-                          final UserAuthCredentials userAuthCredentials = UserAuthCredentials(
+                          final MerchantAuthCredentials merchantAuthCredentials = MerchantAuthCredentials(
                               email: _emailController.text,
                               password: _passwordController.text
                           );
 
-                          context.read<LoginBloc>().add(
-                              LoginButtonPressed(userAuthCredentials: userAuthCredentials)
+                          context.read<MerchantLoginBloc>().add(
+                              MerchantLoginButtonPressed(merchantAuthCredentials: merchantAuthCredentials)
                           );
                         }else{
                           ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(content: Text('Enter Correct Data'))
+                              SnackBar(content: Text('Enter Correct Data'))
                           );
                         }
                       }
@@ -180,7 +171,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                   GestureDetector(
                     onTap: () {
-                      Navigator.pushNamed(context, RegisterScreen.register);
+                      Navigator.pushNamed(context, MerchantRegisterScreen.register);
                     },
                     child: Text(
                       "SignUp ",
@@ -190,18 +181,6 @@ class _LoginScreenState extends State<LoginScreen> {
                     ),
                   ),
                 ],
-              ),
-              Align(
-                alignment: Alignment.center,
-                child: TextButton(
-                  onPressed: (){
-                    Navigator.of(context).pushNamed(MerchantLoginScreenNavigator.merchantLogin);
-                  },
-                  child: Text('Are you a merchant',style: TextStyle(
-                    fontSize: 16,
-                    color: Colors.blueGrey
-                  ),),
-                ),
               ),
               SizedBox(height: 12.0,)
             ],

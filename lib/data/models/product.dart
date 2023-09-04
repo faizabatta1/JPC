@@ -17,21 +17,8 @@ class Product{
     required this.discount,
     required this.id
   });
-  
-  factory Product.fromSnapshot(Map data){
 
-    return Product(
-      name: data['name'],
-      description: data['description'],
-      price: data['price'],
-      imageUrl: data['imageUrl'],
-      hasDiscount: data['hasDiscount'],
-      discount: data['discount'],
-      id: data['id']
-    );
-  }
-
-  factory Product.fromMap(Map map){
+  factory Product.fromJson(Map map){
     return Product(
       name: map['name'],
       description: map['description'],
